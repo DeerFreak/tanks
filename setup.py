@@ -8,5 +8,4 @@ setup(name='Tanks',
           'coverage',
           'numpy',
           'pygame'
-
       ])

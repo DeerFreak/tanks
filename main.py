@@ -1,3 +1,5 @@
+from init import *
 
 if __name__ == '__main__':
-    pass
+    initialize_game()
+    
