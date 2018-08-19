@@ -8,9 +8,6 @@ class tank(object):
         self.alive = True
 
         self.moving = False
-        self.xlen = 100
-        self.ylen = 60
-        self.cannonlen = 70
         self.angle = 0
         self.pos = [start_pos[0], start_pos[1]]
 
