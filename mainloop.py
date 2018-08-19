@@ -3,6 +3,7 @@ import sys
 import time
 from colors import *
 from pygame.locals import *
+import numpy as np
 
 
 def mainloop(game):
@@ -22,9 +23,9 @@ def mainloop(game):
         elif event_dict["W"] == False and event_dict["S"] == False:
             tank1.moving = 0
         if event_dict["A"] == True:
-            tank1.angle -= tank1.turn_speed
+            tank1.calc_angle(-1)
         if event_dict["D"] == True:
-            tank1.angle += tank1.turn_speed
+            tank1.calc_angle(+1)
 
         if event_dict["PO"] == True:
             tank2.moving = 1
@@ -33,12 +34,24 @@ def mainloop(game):
         elif event_dict["PO"] == False and event_dict["PU"] == False:
             tank2.moving = 0
         if event_dict["PL"] == True:
-            tank2.angle -= tank2.turn_speed
+            tank2.calc_angle(-1)
         if event_dict["PR"] == True:
-            tank2.angle += tank2.turn_speed
+            tank2.calc_angle(+1)
 
         tank1.move()
         tank2.move()
+        if check_collision(tank1,tank2):
+            if event_dict["W"] == True:
+                tank1.moving = -1
+            elif event_dict["S"] == True:
+                tank1.moving = 1
+            if event_dict["PO"] == True:
+                tank2.moving = -1
+            elif event_dict["PU"] == True:
+                tank2.moving = 1
+            tank1.move()
+            tank2.move()
+
         surf.fill(WHITE)
         tank1.plot()
         tank2.plot()
@@ -102,6 +115,18 @@ def events(event_dict):
                 event_dict["P"] = False
 
     return event_dict
+
+
+def check_collision(tank1, tank2):
+    dist = np.linalg.norm(np.asarray(tank1.pos)-np.asarray(tank2.pos))
+    dist_min = np.linalg.norm(np.asarray([87,54]))
+    if dist < 0.8*dist_min:
+        collision = True
+    else: collision = False
+
+    return collision
+
+
 
 if __name__ == "__main__":
     while True:

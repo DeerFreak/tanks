@@ -15,6 +15,7 @@ class Tank(object):
         self.gear = {0:0, 1:self.speed, -1:-self.speed}
         self.angle = 0
         self.pos = [start_pos[0], start_pos[1]]
+        self.rect = None
         
         if color == "red":
             img = "tank_red.png"
@@ -24,12 +25,31 @@ class Tank(object):
         self.toRotate = self.cross.copy()
 
     def move(self):
+        pos_old = self.pos[:]
         self.pos[0] += (m.cos(m.radians(self.angle)) * self.gear[self.moving])
         self.pos[1] += (-m.sin(m.radians(self.angle)) * self.gear[self.moving])
-        print(self.pos)
+        self.calc_rect()
+        if self.rect[0] < 0 or self.rect[0] + self.rect[2] > 1000:
+            self.pos[0] = pos_old[0]
+
+        if self.rect[1] < 0 or self.rect[1] + self.rect[3] > 1000:
+            self.pos[1] = pos_old[1]
+
 
     def plot(self):
-        self.toRotate = pygame.transform.rotate(self.cross, self.angle)
-        rect = self.toRotate.get_rect(center=(int(self.pos[0]),int(self.pos[1])))
-        self.surf.blit(self.toRotate,rect)
+        self.surf.blit(self.toRotate,self.rect)
 
+    def calc_angle(self, dir):
+        self.angle += self.turn_speed * dir
+        self.calc_rect()
+        if self.rect[0] < 0 or self.rect[0] + self.rect[2] > 1000:
+            self.angle -= self.turn_speed * dir
+            self.calc_rect()
+        if self.rect[1] < 0 or self.rect[1] + self.rect[3] > 1000:
+            self.angle -= self.turn_speed * dir
+            self.calc_rect()
+
+
+    def calc_rect(self):
+        self.toRotate = pygame.transform.rotate(self.cross, self.angle)
+        self.rect = self.toRotate.get_rect(center=(int(self.pos[0]), int(self.pos[1])))
