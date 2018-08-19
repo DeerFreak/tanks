@@ -9,8 +9,8 @@ class Tank(object):
         self.surf = surf
         self.alive = True
 
-        self.turn_speed = -0.2
-        self.speed = 0.5
+        self.turn_speed = -0.15
+        self.speed = 0.3
         self.moving = 0
         self.gear = {0:0, 1:self.speed, -1:-self.speed}
         self.angle = 0
