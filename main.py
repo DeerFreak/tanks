@@ -2,6 +2,6 @@ from init import *
 from mainloop import mainloop
 
 if __name__ == '__main__':
-    resolution = (1920,1080)
+    resolution = (1000,1000)
     game = initialize_game(resolution)
     mainloop(game)

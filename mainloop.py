@@ -39,7 +39,6 @@ def mainloop(game):
 
         tank1.move()
         tank2.move()
-
         surf.fill(WHITE)
         tank1.plot()
         tank2.plot()
@@ -78,7 +77,7 @@ def events(event_dict):
             if event.key == K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            
+
 
         if event.type == KEYUP:
             if event.key == K_UP:
