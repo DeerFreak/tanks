@@ -2,16 +2,18 @@ import pygame
 import math as m
 import numpy as np
 from colors import *
+from stats import turn_speed, tank_speed, tank_gear
+from bullet_class import bullet
 
 
 class Tank(object):
     def __init__(self, start_pos, surf, color):
         self.alive = True # tank alive
 
-        self.turn_speed = -0.15 # tank position_stats
-        self.speed = 0.3
+        self.turn_speed = -turn_speed # tank position_stats
+        self.speed = tank_speed
         self.moving = 0
-        self.gear = {0:0, 1:self.speed, -1:-self.speed}
+        
         self.angle = 0
         self.pos = [start_pos[0], start_pos[1]]
         
@@ -26,10 +28,13 @@ class Tank(object):
 
     def move(self):
         pos_old = self.pos[:] # to reset if outside of borders
-        self.pos[0] += (m.cos(m.radians(self.angle)) * self.gear[self.moving]) # x-pos
-        self.pos[1] -= (m.sin(m.radians(self.angle)) * self.gear[self.moving]) # y-pos
+        self.pos[0] += (m.cos(m.radians(self.angle)) * tank_gear[self.moving]) # x-pos
+        self.pos[1] -= (m.sin(m.radians(self.angle)) * tank_gear[self.moving]) # y-pos
         self.calc_rect()
         self.pos_border_check()
+
+    def fire(self):
+        return (bullet(self.pos, self.angle, "normal", self, self.surf))
 
     def pos_border_check(self):
         if self.rect[0] < 0 or self.rect[0] + self.rect[2] > 1000: # x-borders

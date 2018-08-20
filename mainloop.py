@@ -1,25 +1,37 @@
 import pygame
 import sys
-import time
+import time as t
 from colors import *
 from pygame.locals import *
 import numpy as np
+from stats import bullets
 
 class App(object):
-    def __init__(self, game):
+    def __init__(self, game, FPS):
         self.surf       = game[0]
         self.tank1      = game[1][0]
         self.tank2      = game[1][1]
+        self.bullets    = []
         self.running    = True
+        self.delta_frame       = 1 / FPS
         self.event_dict = { "W": False, "A": False, "S": False, "D": False, "Space": False,
                             "PO": False, "PL": False, "PU": False, "PR": False, "P": False}
+        self.init_game_stats()
+
+    def init_game_stats(self):
+        self.last_fire = [0,] * 2
+
     def start(self):
+        time = t.time()
         while self.running:
-            self.events() 
-            self.tank_key_assignment() 
-            self.tank_move()
-            self.check_tank_collision()
-            self.plot()
+            if (t.time() - time) >= self.delta_frame:
+                time = t.time()
+                self.events() 
+                self.tank_key_assignment() 
+                self.tank_move()
+                self.bullet_move()
+                self.check_tank_collision()
+                self.plot()
 
 
     def events(self):
@@ -107,7 +119,11 @@ class App(object):
         if self.event_dict["A"] == True:
             self.tank1.calc_angle(-1)
         if self.event_dict["D"] == True:
-                self.tank1.calc_angle(+1)
+            self.tank1.calc_angle(+1)
+        if self.event_dict["Space"] == True:
+            if (t.time() - self.last_fire[0]) >= bullets["normal"]["reload_time"]:
+                self.bullets.append(self.tank1.fire())
+                self.last_fire[0] = t.time()
 
     def tank2_key_assignment(self):
         if self.event_dict["PO"] == True:
@@ -120,15 +136,25 @@ class App(object):
             self.tank2.calc_angle(-1)
         if self.event_dict["PR"] == True:
             self.tank2.calc_angle(+1)
+        if self.event_dict["P"] == True:
+            if (t.time() - self.last_fire[1]) >= bullets["normal"]["reload_time"]:
+                self.bullets.append(self.tank2.fire())
+                self.last_fire[1] = t.time()
 
     def tank_move(self):
         self.tank1.move()
         self.tank2.move()
+    
+    def bullet_move(self):
+        for bullet in self.bullets:
+            bullet.move()
 
     def plot(self):
         self.surf.fill(WHITE)
         self.tank1.plot()
         self.tank2.plot()
+        for bullet in self.bullets:
+            bullet.plot()
 
         pygame.display.update()
 
