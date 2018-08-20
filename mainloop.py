@@ -63,6 +63,10 @@ class App(object):
                     self.event_dict["Space"] = True
                 if event.key == K_p:
                     self.event_dict["P"] = True
+                if event.key == K_c:
+                    self.tank1.next_weapon()
+                if event.key == K_o:
+                    self.tank2.next_weapon()
                 if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -121,7 +125,8 @@ class App(object):
         if self.event_dict["D"] == True:
             self.tank1.calc_angle(+1)
         if self.event_dict["Space"] == True:
-            if (t.time() - self.last_fire[0]) >= bullets["normal"]["reload_time"]:
+            temp = bullets[self.tank1.loaded_weapons[self.tank1.current_weapon]]["reload_time"]
+            if (t.time() - self.last_fire[0]) >= temp:
                 self.bullets.append(self.tank1.fire())
                 self.last_fire[0] = t.time()
 
@@ -137,7 +142,8 @@ class App(object):
         if self.event_dict["PR"] == True:
             self.tank2.calc_angle(+1)
         if self.event_dict["P"] == True:
-            if (t.time() - self.last_fire[1]) >= bullets["normal"]["reload_time"]:
+            temp = bullets[self.tank2.loaded_weapons[self.tank2.current_weapon]]["reload_time"]
+            if (t.time() - self.last_fire[1]) >= temp:
                 self.bullets.append(self.tank2.fire())
                 self.last_fire[1] = t.time()
 

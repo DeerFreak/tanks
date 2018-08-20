@@ -13,7 +13,7 @@ class bullet(object):
         self.shooter    = shooter
         self.t_expire   = t.time() + bullets[type]["l_time"]
 
-        self.surf = surf
+        self.surf       = surf
 
     def move(self):
         self.pos[0] += (m.cos(m.radians(self.angle)) * self.speed) # x-pos
