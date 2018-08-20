@@ -41,6 +41,7 @@ class Tank(object):
 
     def next_weapon(self):
         self.current_weapon = (self.current_weapon + 1) % len(self.loaded_weapons)
+        print("next")
 
     def pos_border_check(self, pos_old):
         if self.rect[0] < 0 or self.rect[0] + self.rect[2] > resolution[0]: # x-borders

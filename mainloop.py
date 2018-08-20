@@ -14,12 +14,15 @@ class App(object):
         self.bullets    = []
         self.running    = True
         self.delta_frame       = 1 / FPS
-        self.event_dict = { "W": False, "A": False, "S": False, "D": False, "Space": False,
-                            "PO": False, "PL": False, "PU": False, "PR": False, "P": False}
+        self.event_dict = { "w": False, "a": False, "s": False, "d": False, " ": False,
+                            "đ": False, "ē": False, "Ē": False, "Ĕ": False, "p": False,
+                            "c": False, "o": False}
+        self.event_keys = { "c":self.tank1.next_weapon,\
+                            "o":self.tank2.next_weapon}
         self.init_game_stats()
 
     def init_game_stats(self):
-        self.last_fire = [0,] * 2
+        (self.last_fire, self.last_reload) = ([0,] * 2,) * 2
 
     def start(self):
         time = t.time()
@@ -41,70 +44,28 @@ class App(object):
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-
+        
             if event.type == KEYDOWN:
-                if event.key == K_UP:
-                    self.event_dict["PO"] = True
-                if event.key == K_DOWN:
-                    self.event_dict["PU"] = True
-                if event.key == K_LEFT:
-                    self.event_dict["PL"] = True
-                if event.key == K_RIGHT:
-                    self.event_dict["PR"] = True
-                if event.key == K_w:
-                    self.event_dict["W"] = True
-                if event.key == K_a:
-                    self.event_dict["A"] = True
-                if event.key == K_s:
-                    self.event_dict["S"] = True
-                if event.key == K_d:
-                    self.event_dict["D"] = True
-                if event.key == K_SPACE:
-                    self.event_dict["Space"] = True
-                if event.key == K_p:
-                    self.event_dict["P"] = True
-                if event.key == K_c:
-                    self.tank1.next_weapon()
-                if event.key == K_o:
-                    self.tank2.next_weapon()
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                for key in self.event_keys:
+                    if (chr(event.key) == key):
+                        self.event_keys[key]()
+                        return
 
+                self.event_dict[chr(event.key)] = True
             if event.type == KEYUP:
-                if event.key == K_UP:
-                    self.event_dict["PO"] = False
-                if event.key == K_DOWN:
-                    self.event_dict["PU"] = False
-                if event.key == K_LEFT:
-                    self.event_dict["PL"] = False
-                if event.key == K_RIGHT:
-                    self.event_dict["PR"] = False
-                if event.key == K_w:
-                    self.event_dict["W"] = False
-                if event.key == K_a:
-                    self.event_dict["A"] = False
-                if event.key == K_s:
-                    self.event_dict["S"] = False
-                if event.key == K_d:
-                    self.event_dict["D"] = False
-                if event.key == K_SPACE:
-                    self.event_dict["Space"] = False
-                if event.key == K_p:
-                    self.event_dict["P"] = False
-
+                self.event_dict[chr(event.key)] = False
 
     def check_tank_collision(self): # tank collision
         dist = np.linalg.norm(np.asarray(self.tank1.pos)-np.asarray(self.tank2.pos)) # dist tank centers
         dist_min = np.linalg.norm(np.asarray([87,54])) # radius of wides possible circle around tank
         if dist < 0.8*dist_min: # 0.8 is factor to prevent unrealistic distance of collision
-            if self.event_dict["W"] == True:
+            if self.event_dict["w"] == True:
                 self.tank1.moving = -1
-            elif self.event_dict["S"] == True:
+            elif self.event_dict["s"] == True:
                 self.tank1.moving = 1
-            if self.event_dict["PO"] == True:
+            if self.event_dict["đ"] == True:
                 self.tank2.moving = -1
-            elif self.event_dict["PU"] == True:
+            elif self.event_dict["Ē"] == True:
                 self.tank2.moving = 1
             self.tank1.move()
             self.tank2.move()
@@ -114,34 +75,34 @@ class App(object):
         self.tank2_key_assignment()
 
     def tank1_key_assignment(self):
-        if self.event_dict["W"] == True:
+        if self.event_dict["w"] == True:
             self.tank1.moving = 1
-        elif self.event_dict["S"] == True:
+        elif self.event_dict["s"] == True:
             self.tank1.moving = -1
-        elif self.event_dict["W"] == False and self.event_dict["S"] == False:
+        elif self.event_dict["w"] == False and self.event_dict["s"] == False:
             self.tank1.moving = 0
-        if self.event_dict["A"] == True:
+        if self.event_dict["a"] == True:
             self.tank1.calc_angle(-1)
-        if self.event_dict["D"] == True:
+        if self.event_dict["d"] == True:
             self.tank1.calc_angle(+1)
-        if self.event_dict["Space"] == True:
+        if self.event_dict[" "] == True:
             temp = bullets[self.tank1.loaded_weapons[self.tank1.current_weapon]]["reload_time"]
             if (t.time() - self.last_fire[0]) >= temp:
                 self.bullets.append(self.tank1.fire())
                 self.last_fire[0] = t.time()
 
     def tank2_key_assignment(self):
-        if self.event_dict["PO"] == True:
+        if self.event_dict["đ"] == True:
             self.tank2.moving = 1
-        elif self.event_dict["PU"] == True:
+        elif self.event_dict["Ē"] == True:
             self.tank2.moving = -1
-        elif self.event_dict["PO"] == False and self.event_dict["PU"] == False:
+        elif self.event_dict["đ"] == False and self.event_dict["Ē"] == False:
             self.tank2.moving = 0
-        if self.event_dict["PL"] == True:
+        if self.event_dict["Ĕ"] == True:
             self.tank2.calc_angle(-1)
-        if self.event_dict["PR"] == True:
+        if self.event_dict["ē"] == True:
             self.tank2.calc_angle(+1)
-        if self.event_dict["P"] == True:
+        if self.event_dict["p"] == True:
             temp = bullets[self.tank2.loaded_weapons[self.tank2.current_weapon]]["reload_time"]
             if (t.time() - self.last_fire[1]) >= temp:
                 self.bullets.append(self.tank2.fire())
