@@ -2,7 +2,7 @@ from colors import *
 
 #       display
 FPS             = 30 # calc speed as well
-resolution      = (1000, 1000)
+resolution      = (500, 500)
 fullscreen      = False
 
 #       tank
@@ -14,5 +14,5 @@ tank_gear       = { 0:0,\
 
 #       bullet
 bullets         = { "normal":{"vel":1500 / FPS, "l_time":5 , "size":6 , "color":BLACK, "reload_time":0.5},
-                    "berta" :{"vel":300  / FPS, "l_time":10, "size":50, "color":BLUE, "reload_time":2}
+                    "berta" :{"vel":3000  / FPS, "l_time":10, "size":50, "color":BLUE, "reload_time":2}
                 }

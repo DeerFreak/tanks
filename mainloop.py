@@ -1,8 +1,8 @@
-import pygame
+import pygame as pg
 import sys
 import time as t
 from colors import *
-from pygame.locals import *
+from pg.locals import *
 import numpy as np
 from stats import bullets
 
@@ -18,7 +18,9 @@ class App(object):
                             "đ": False, "ē": False, "Ē": False, "Ĕ": False, "p": False,
                             "c": False, "o": False}
         self.event_keys = { "c":self.tank1.next_weapon,\
-                            "o":self.tank2.next_weapon}
+                            "o":self.tank2.next_weapon,\
+                            "č":pg.quit} # Quit on "-" num block
+ 
         self.init_game_stats()
 
     def init_game_stats(self):
@@ -36,22 +38,22 @@ class App(object):
                 self.check_tank_collision()
                 self.plot()
 
-
     def events(self):
         # Panzer1: WASD und Space
         # Panzer2: Pfeiltasten und P
-        for event in pygame.event.get():
+        for event in pg.event.get():
             if event.type == QUIT:
-                pygame.quit()
+                pg.quit()
                 sys.exit()
         
             if event.type == KEYDOWN:
                 for key in self.event_keys:
                     if (chr(event.key) == key):
+                        print("True")
                         self.event_keys[key]()
                         return
-
                 self.event_dict[chr(event.key)] = True
+
             if event.type == KEYUP:
                 self.event_dict[chr(event.key)] = False
 
@@ -123,6 +125,6 @@ class App(object):
         for bullet in self.bullets:
             bullet.plot()
 
-        pygame.display.update()
+        pg.display.update()
 
 

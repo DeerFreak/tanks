@@ -1,7 +1,7 @@
 import pygame
 from colors import *
 from tank_class import *
-
+from stats import resolution
 import time
 
 def initialize_game(resolution, fullscreen):
@@ -17,7 +17,7 @@ def initialize_game(resolution, fullscreen):
     pygame.display.update()
     
     tanks       = []
-    stats       = {"red":(200, 500), "blue": (800, 600)}
+    stats       = {"red":(resolution[0] / 4, resolution[1] / 4), "blue": (3 * resolution[0] / 4, 3 * resolution[1] / 4)}
     
     for i in stats.keys():
         tanks.append(Tank(stats[i], surf, i))
