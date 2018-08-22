@@ -15,6 +15,7 @@ class Tank(pygame.sprite.Sprite):
             img = "tank_blue.png"
         self.image = pygame.image.load(img).convert_alpha()  # plot
         self.alive = True  # tank alive
+        self.health = 1000
 
         self.turn_speed = -turn_speed  # tank position_stats
         self.speed = tank_speed
