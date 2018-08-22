@@ -52,6 +52,12 @@ class App(object):
                 self.plot()
                 if self.tank1.health <= 0 or self.tank2.health <= 0:
                     self.running = False
+        if self.tank1.health <= 0:
+            winner = "Spieler 1"
+        else:
+            winner = "Spieler 2"
+        print("Der Gewinner ist " + winner + "!")
+        t.sleep(3)
 
     def events(self):
         # Panzer1: WASD und Space
@@ -99,10 +105,20 @@ class App(object):
     def check_bullet_hit(self):
         hits1 = pygame.sprite.spritecollide(self.tank1, self.bullets, False)
         hits2 = pygame.sprite.spritecollide(self.tank2, self.bullets, False)
-        for _ in hits1:
-            self.tank1.health -= 20
-        for _ in hits2:
-            self.tank2.health -= 20
+        for hit in hits1:
+            if hit.type == "normal" and t.time()-hit.shoot_time >= 0.12:
+                self.tank1.health -= 20
+                self.bullets.remove(hit)
+            elif hit.type == "berta" and t.time()-hit.shoot_time >= 0.06:
+                self.tank1.health -= 40
+                self.bullets.remove(hit)
+        for hit in hits2:
+            if hit.type == "normal" and t.time()-hit.shoot_time >= 0.12:
+                self.tank2.health -= 20
+                self.bullets.remove(hit)
+            elif hit.type == "berta" and t.time()-hit.shoot_time >= 0.06:
+                self.tank2.health -= 40
+                self.bullets.remove(hit)
 
     def tank_key_assignment(self):
         self.tank1_key_assignment()

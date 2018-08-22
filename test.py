@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(player_img, (50, 38))  # loads scaled picture
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.radius =
+        self.radius = None
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
