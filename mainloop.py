@@ -37,11 +37,12 @@ class App(object):
         self.last_reload = [0, 0]
 
     def start(self):
-
+        pygame.init()
         time = t.time()
 
         while self.running:
             if (t.time() - time) >= self.delta_frame:
+
                 time = t.time()
                 self.events() 
                 self.tank_key_assignment() 
@@ -49,14 +50,24 @@ class App(object):
                 self.bullet_move()
                 self.check_tank_collision()
                 self.check_bullet_hit()
+
                 self.plot()
                 if self.tank1.health <= 0 or self.tank2.health <= 0:
                     self.running = False
+
+        # Game is over
         if self.tank1.health <= 0:
             winner = "Spieler 1"
         else:
             winner = "Spieler 2"
         print("Der Gewinner ist " + winner + "!")
+        t.sleep(0.5)
+        self.surf.fill(WHITE)
+        font = pygame.font.SysFont("comicsansms", 50)
+        text = font.render("Sieger: " + winner, True, (0, 128, 0))
+        self.surf.blit(text, (resolution[0]/2 - text.get_width()/2,
+                              resolution[1]/2 - text.get_height()/2))
+        pygame.display.update()
         t.sleep(3)
 
     def events(self):
@@ -172,6 +183,11 @@ class App(object):
 
     def plot(self):
         self.surf.fill(WHITE)
+        font = pygame.font.SysFont("comicsansms", 20)
+        text1 = font.render("Player 1: " + str(self.tank1.health) + " HP", True, (0, 128, 0))
+        text2 = font.render("Player 2: " + str(self.tank2.health) + " HP", True, (0, 128, 0))
+        self.surf.blit(text1, (0, 0))
+        self.surf.blit(text2, (0, 30))
         self.tank1.plot()
         self.tank2.plot()
         for bullet in self.bullets:
