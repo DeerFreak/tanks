@@ -1,18 +1,28 @@
-import pygame as pg
+import pygame
 import sys
 import time as t
 from colors import *
 from pygame.locals import *
 import numpy as np
-from stats import bullets
+from stats import bullets, resolution
+from tank_class import Tank
 
 
 class App(object):
-    def __init__(self, game, FPS):
-        self.surf = game[0]
-        self.tank1 = game[1][0]
-        self.tank2 = game[1][1]
-        self.bullets = []
+    def __init__(self, surf, FPS):
+        self.surf = surf
+        self.all_sprites = pygame.sprite.Group()
+        self.tanks = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
+        tank_stats = {"red": (resolution[0] / 4, resolution[1] / 4),
+                      "blue": (3 * resolution[0] / 4, 3 * resolution[1] / 4)}
+        self.tank1 = Tank(tank_stats["red"], self.surf, "red")
+        self.tank2 = Tank(tank_stats["blue"], self.surf, "blue")
+        self.all_sprites.add(self.tank1)
+        self.all_sprites.add(self.tank2)
+        self.tanks.add(self.tank1)
+        self.tanks.add(self.tank2)
+
         self.running = True
         self.delta_frame = 1 / FPS
         self.event_dict = {"w": False, "a": False, "s": False, "d": False, " ": False,
@@ -20,7 +30,7 @@ class App(object):
                            "c": False, "o": False}
         self.event_keys = {"c": self.tank1.next_weapon,
                            "o": self.tank2.next_weapon,
-                           "č": pg.quit}  # Quit on "-" num block
+                           "č": pygame.quit}  # Quit on "-" num block
         self.last_fire = None
         self.last_reload = None
         self.init_game_stats()
@@ -29,7 +39,9 @@ class App(object):
         (self.last_fire, self.last_reload) = ([0, ] * 2,) * 2
 
     def start(self):
+
         time = t.time()
+
         while self.running:
             if (t.time() - time) >= self.delta_frame:
                 time = t.time()
@@ -43,9 +55,9 @@ class App(object):
     def events(self):
         # Panzer1: WASD und Space
         # Panzer2: Pfeiltasten und P
-        for event in pg.event.get():
+        for event in pygame.event.get():
             if event.type == QUIT:
-                pg.quit()
+                pygame.quit()
                 sys.exit()
         
             if event.type == KEYDOWN:
@@ -92,8 +104,9 @@ class App(object):
         if self.event_dict[" "]:
             temp = bullets[self.tank1.loaded_weapons[self.tank1.current_weapon]]["reload_time"]
             if (t.time() - self.last_fire[0]) >= temp:
-                self.bullets.append(self.tank1.fire())
-                self.last_fire[0] = t.time()
+                bullet = self.tank1.fire()
+                self.bullets.add(bullet)
+                self.all_sprites.add(bullet)
 
     def tank2_key_assignment(self):
         if self.event_dict["đ"]:
@@ -109,8 +122,9 @@ class App(object):
         if self.event_dict["p"]:
             temp = bullets[self.tank2.loaded_weapons[self.tank2.current_weapon]]["reload_time"]
             if (t.time() - self.last_fire[1]) >= temp:
-                self.bullets.append(self.tank2.fire())
-                self.last_fire[1] = t.time()
+                bullet = self.tank2.fire()
+                self.bullets.add(bullet)
+                self.all_sprites.add(bullet)
 
     def tank_move(self):
         self.tank1.move()
@@ -127,6 +141,6 @@ class App(object):
         for bullet in self.bullets:
             bullet.plot()
 
-        pg.display.update()
+        pygame.display.update()
 
 

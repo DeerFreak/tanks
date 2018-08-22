@@ -1,7 +1,7 @@
 from init import *
 from mainloop import App
-from stats import resolution, FPS, fullscreen
+from stats import FPS, fullscreen
 if __name__ == '__main__':
-    game = initialize_game(resolution, fullscreen)
-    mainloop = App(game, FPS)
+    surf = initialize_game(fullscreen)
+    mainloop = App(surf, FPS)
     mainloop.start()

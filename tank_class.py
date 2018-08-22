@@ -3,11 +3,17 @@ import math as m
 import numpy as np
 from colors import *
 from stats import turn_speed, tank_speed, tank_gear, resolution
-from bullet_class import bullet
+from bullet_class import Bullet
 
 
-class Tank(object):
+class Tank(pygame.sprite.Sprite):
     def __init__(self, start_pos, surf, color):
+        pygame.sprite.Sprite.__init__(self)
+        if color == "red":  # tank1
+            img = "tank_red.png"
+        else:  # tank2
+            img = "tank_blue.png"
+        self.image = pygame.image.load(img).convert_alpha()  # plot
         self.alive = True  # tank alive
 
         self.turn_speed = -turn_speed  # tank position_stats
@@ -20,14 +26,9 @@ class Tank(object):
         self.angle = 0
         self.pos = [start_pos[0], start_pos[1]]
         
-        self.rect = None # Plot-details
+        self.rect = self.image.get_rect()  # Plot-details
         self.surf = surf
-        if color == "red":  # tank1
-            img = "tank_red.png"
-        else:  # tank2
-            img = "tank_blue.png"
-        self.cross = pygame.image.load(img).convert_alpha()  # plot
-        self.toRotate = self.cross.copy()  # plot
+        self.toRotate = self.image.copy()  # plot
 
     def move(self):
         pos_old = self.pos[:]  # to reset if outside of borders
@@ -37,7 +38,8 @@ class Tank(object):
         self.pos_border_check(pos_old)
 
     def fire(self):
-        return bullet(self.pos, self.angle, self.loaded_weapons[self.current_weapon], self, self.surf)
+        bullet = Bullet(self.pos, self.angle, self.loaded_weapons[self.current_weapon], self, self.surf)
+        return bullet
 
     def next_weapon(self):
         self.current_weapon = (self.current_weapon + 1) % len(self.loaded_weapons)
@@ -67,5 +69,5 @@ class Tank(object):
         self.angle_border_check(dir)  # checking for borders and if so reset
 
     def calc_rect(self):
-        self.toRotate = pygame.transform.rotate(self.cross, self.angle)
+        self.toRotate = pygame.transform.rotate(self.image, self.angle)
         self.rect = self.toRotate.get_rect(center=(int(self.pos[0]), int(self.pos[1])))
