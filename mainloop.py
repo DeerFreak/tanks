@@ -125,10 +125,10 @@ class App(object):
                 self.tank1.health -= 40
                 self.bullets.remove(hit)
         for hit in hits2:
-            if hit.type == "normal" and t.time()-hit.shoot_time >= 0.12:
+            if hit.type == "normal" and t.time()-hit.shoot_time >= 0.2:
                 self.tank2.health -= 20
                 self.bullets.remove(hit)
-            elif hit.type == "berta" and t.time()-hit.shoot_time >= 0.06:
+            elif hit.type == "berta" and t.time()-hit.shoot_time >= 0.1:
                 self.tank2.health -= 40
                 self.bullets.remove(hit)
 
