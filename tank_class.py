@@ -13,7 +13,8 @@ class Tank(pygame.sprite.Sprite):
             img = "tank_red_2.png"
         else:  # tank2
             img = "tank_blue_2.png"
-        self.image = pygame.image.load(img).convert_alpha()  # plot
+        self.image = pygame.image.load(img).convert()
+        self.image.set_colorkey(WHITE)  # plot
         self.alive = True  # tank alive
         self.health = 200
 
@@ -30,6 +31,7 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  # Plot-details
         self.surf = surf
         self.toRotate = self.image.copy()  # plot
+
         self.mask = pygame.mask.from_surface(self.toRotate)
 
     def move(self):
