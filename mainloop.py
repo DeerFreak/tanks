@@ -90,17 +90,8 @@ class App(object):
                 self.event_dict[chr(event.key)] = False
 
     def check_tank_collision(self):  # tank collision
-        #collision = pygame.sprite.spritecollide(self.tank1, self.tank2_group, False,
-        #                                        pygame.sprite.collide_rect_ratio(0.9))
 
-        mx, my = pygame.mouse.get_pos()
-        self.tank2.pos = [mx + 40, my + 20]
-        offset_x = self.tank1.rect[0] - mx
-        offset_y = self.tank1.rect[1] - my
-        collision = self.tank1.mask.overlap(self.tank2.mask, (offset_x, offset_y))
-        print(collision)
-
-        #collision = pygame.sprite.spritecollide(self.tank1, self.tank2_group, False, pygame.sprite.collide_mask)
+        collision = pygame.sprite.spritecollide(self.tank1, self.tank2_group, False, pygame.sprite.collide_mask)
         if collision:
             if self.event_dict["w"]:
                 self.tank1.moving = -1
@@ -119,8 +110,8 @@ class App(object):
             if self.event_dict["ē"]:
                 self.tank2.calc_angle(-1)
 
-            #self.tank1.move()
-            #self.tank2.move()
+            self.tank1.move()
+            self.tank2.move()
 
     def check_bullet_hit(self):
         hits1 = pygame.sprite.spritecollide(self.tank1, self.bullets, False)
