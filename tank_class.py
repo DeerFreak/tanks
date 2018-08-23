@@ -30,6 +30,7 @@ class Tank(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()  # Plot-details
         self.surf = surf
         self.toRotate = self.image.copy()  # plot
+        self.mask = pygame.mask.from_surface(self.toRotate)
 
     def move(self):
         pos_old = self.pos[:]  # to reset if outside of borders
@@ -71,4 +72,5 @@ class Tank(pygame.sprite.Sprite):
 
     def calc_rect(self):
         self.toRotate = pygame.transform.rotate(self.image, self.angle)
+        self.mask = pygame.mask.from_surface(self.toRotate)
         self.rect = self.toRotate.get_rect(center=(int(self.pos[0]), int(self.pos[1])))
