@@ -10,9 +10,9 @@ class Tank(pygame.sprite.Sprite):
     def __init__(self, start_pos, surf, color):
         pygame.sprite.Sprite.__init__(self)
         if color == "red":  # tank1
-            img = "tank_red.png"
+            img = "tank_red_2.png"
         else:  # tank2
-            img = "tank_blue.png"
+            img = "tank_blue_2.png"
         self.image = pygame.image.load(img).convert_alpha()  # plot
         self.alive = True  # tank alive
         self.health = 200

@@ -94,7 +94,7 @@ class App(object):
         #                                        pygame.sprite.collide_rect_ratio(0.9))
 
         mx, my = pygame.mouse.get_pos()
-        self.tank2.pos = [mx + 43, my + 27]
+        self.tank2.pos = [mx + 40, my + 20]
         offset_x = self.tank1.rect[0] - mx
         offset_y = self.tank1.rect[1] - my
         collision = self.tank1.mask.overlap(self.tank2.mask, (offset_x, offset_y))
