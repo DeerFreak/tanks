@@ -14,6 +14,7 @@ class App(object):
         self.all_sprites = pygame.sprite.Group()
         self.tanks = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
+        self.walls = pygame.sprite.Group()
         tank_stats = {"red": (resolution[0] / 4, resolution[1] / 4),
                       "blue": (3 * resolution[0] / 4, 3 * resolution[1] / 4)}
         self.tank1 = Tank(tank_stats["red"], self.surf, "red")
