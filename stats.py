@@ -6,8 +6,8 @@ resolution = (1000, 800)
 fullscreen = False
 
 #       tank
-tank_speed = 150 / FPS
-turn_speed = 60 / FPS
+tank_speed = 200 / FPS
+turn_speed = 120 / FPS
 tank_gear = {0: 0,
              1: tank_speed,
              -1: -tank_speed}
