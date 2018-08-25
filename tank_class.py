@@ -17,6 +17,7 @@ class Tank(pg.sprite.Sprite):
         self.color = color
         self.pos = vec(TANK_START_POS[self.color])
         self.last_fired = 0
+        self.sign = 1
 
         self.surf = game.surf
         img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
@@ -38,6 +39,41 @@ class Tank(pg.sprite.Sprite):
         self.current_weapon = 0
 
     def update(self):
+        self.moving = 0
+        if self.color == "red":
+            if self.game.keys[pg.K_w]:
+                self.moving = 1 * self.sign
+            elif self.game.keys[pg.K_s]:
+                self.moving = -1 * self.sign
+            elif self.game.keys[pg.K_w] is False and self.game.keys[pg.K_s] is False:
+                self.moving = 0
+            if self.game.keys[pg.K_a]:
+                self.calc_angle(-1 * self.sign)
+            if self.game.keys[pg.K_d]:
+                self.calc_angle(+1 * self.sign)
+            if self.game.keys[pg.K_v] and self.sign == 1:
+                reload_time = BULLETS[self.loaded_weapons[self.current_weapon]]["reload_time"]
+                now = pg.time.get_ticks()
+                if now - self.last_fired >= reload_time:
+                    self.fire()
+                    self.last_fired = now
+        else:
+            if self.game.keys[pg.K_UP]:
+                self.moving = 1 * self.sign
+            elif self.game.keys[pg.K_DOWN]:
+                self.moving = -1 * self.sign
+            elif self.game.keys[pg.K_UP] is False and self.game.keys[pg.K_DOWN] is False:
+                self.moving = 0
+            if self.game.keys[pg.K_LEFT]:
+                self.calc_angle(-1 * self.sign)
+            if self.game.keys[pg.K_RIGHT]:
+                self.calc_angle(+1 * self.sign)
+            if self.game.keys[pg.K_p] and self.sign == 1:
+                reload_time = BULLETS[self.loaded_weapons[self.current_weapon]]["reload_time"]
+                now = pg.time.get_ticks()
+                if now - self.last_fired >= reload_time:
+                    self.fire()
+                    self.last_fired = now
         self.move()
 
     def move(self):

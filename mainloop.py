@@ -57,17 +57,16 @@ class App(object):
         while self.tank1.health > 0 and self.tank2.health > 0:
             self.clock.tick(FPS)
             self.events()
-            self.tank_update(+1)
             self.all_sprites.update()
             # collision of tanks
+            (self.tank1.sign, self.tank2.sign) = (-1,) * 2 # for all tank collisions
             if pg.sprite.spritecollide(self.tank1, self.tank2_group, False, pg.sprite.collide_mask):
-                self.tank_update(-1)
                 self.tanks.update()
             # collision of tanks & walls
-            collisions = pg.sprite.groupcollide(self.tanks, self.walls, False, pg.sprite.collide_mask)
-            #for col in collisions:
-             #   col.tank_update(-1)
-              #  self.tanks.update()
+            collisions = pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask)
+            for col in collisions:
+                col.update()
+            (self.tank1.sign, self.tank2.sign) = (1,) * 2 # reset sign after tank collisions
 
             self.bullets.update()
             self.check_bullet_hit()
@@ -95,43 +94,6 @@ class App(object):
                     pass
 
             self.keys = pg.key.get_pressed()
-
-    def tank_update(self, sign):
-        self.tank1.moving = 0
-        self.tank2.moving = 0
-        if self.keys[pg.K_w]:
-            self.tank1.moving = 1 * sign
-        elif self.keys[pg.K_s]:
-            self.tank1.moving = -1 * sign
-        elif self.keys[pg.K_w] is False and self.keys[pg.K_s] is False:
-            self.tank1.moving = 0
-        if self.keys[pg.K_a]:
-            self.tank1.calc_angle(-1 * sign)
-        if self.keys[pg.K_d]:
-            self.tank1.calc_angle(+1 * sign)
-        if self.keys[pg.K_v] and sign == 1:
-            reload_time = BULLETS[self.tank1.loaded_weapons[self.tank1.current_weapon]]["reload_time"]
-            now = pg.time.get_ticks()
-            if now - self.tank1.last_fired >= reload_time:
-                self.tank1.fire()
-                self.tank1.last_fired = now
-        if self.keys[pg.K_UP]:
-            self.tank2.moving = 1 * sign
-        elif self.keys[pg.K_DOWN]:
-            self.tank2.moving = -1 * sign
-        elif self.keys[pg.K_UP] is False and self.keys[pg.K_DOWN] is False:
-            self.tank2.moving = 0
-        if self.keys[pg.K_LEFT]:
-            self.tank2.calc_angle(-1 * sign)
-        if self.keys[pg.K_RIGHT]:
-            self.tank2.calc_angle(+1 * sign)
-        if self.keys[pg.K_p] and sign == 1:
-            reload_time = BULLETS[self.tank2.loaded_weapons[self.tank2.current_weapon]]["reload_time"]
-            now = pg.time.get_ticks()
-            if now - self.tank2.last_fired >= reload_time:
-                self.tank2.fire()
-                self.tank2.last_fired = now
-
 
     def check_bullet_hit(self):
         hits = pg.sprite.groupcollide(self.tanks, self.bullets, False, False)
