@@ -9,6 +9,7 @@ from os import path
 from spritesheet import Spritesheet
 from sprites import *
 from wall_class import *
+import random
 
 class App(object):
     def __init__(self, surf):
@@ -45,8 +46,16 @@ class App(object):
         self.tank2 = Tank(self, "blue")
         self.tank2_group = pg.sprite.Group()
         self.tank2_group.add(self.tank2)
-        for wall in WALLS:
-            Wall(self, *wall)
+        # spawing random walls
+        while len(self.walls) < WALLS_NUMBER:
+            (x, y) = (random.randint(0, WIDTH), random.randint(0, HEIGHT))
+            ang = random.randint(0, 360)
+            wall = Wall(self, (x, y), ang)
+            if pg.sprite.spritecollide(wall, self.walls, False, pg.sprite.collide_mask) or \
+                pg.sprite.spritecollide(wall, self.tanks, False, pg.sprite.collide_mask):
+                wall.kill()
+            self.walls.add(wall)
+
         self.event_keys = {"c": self.tank1.next_weapon,
                            "o": self.tank2.next_weapon,
                            "č": pg.quit}  # Quit on "-" num block
@@ -60,14 +69,16 @@ class App(object):
             self.all_sprites.update()
             # collision of tanks
             (self.tank1.sign, self.tank2.sign) = (-1,) * 2 # for all tank collisions
-            if pg.sprite.spritecollide(self.tank1, self.tank2_group, False, pg.sprite.collide_mask):
-                self.tanks.update()
+            if pg.sprite.spritecollide(self.tank1, self.tank2_group, False): # to improve performance
+                if pg.sprite.spritecollide(self.tank1, self.tank2_group, False, pg.sprite.collide_mask):
+                    self.tanks.update()
             # collision of tanks & walls
-            collisions = pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask)
-            for col in collisions:
-                col.update()
+            if pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask): # to improve performance
+                collisions = pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask)
+                for col in collisions:
+                    col.update()
             (self.tank1.sign, self.tank2.sign) = (1,) * 2 # reset sign after tank collisions
-
+            pg.sprite.groupcollide(self.bullets, self.walls, True, False)
             self.bullets.update()
             self.check_bullet_hit()
             self.plot()
@@ -81,8 +92,6 @@ class App(object):
 
 
     def events(self):
-        # Panzer1: WASD und Space
-        # Panzer2: Pfeiltasten und P
         for event in pg.event.get():
             if event.type == QUIT:
                 self.running = False
