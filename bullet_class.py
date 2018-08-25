@@ -25,7 +25,7 @@ class Bullet(pygame.sprite.Sprite):
 
         self.surf = game.surf
 
-    def move(self):
+    def update(self):
         self.pos[0] += (m.cos(m.radians(self.angle)) * self.speed)  # x-pos
         self.pos[1] -= (m.sin(m.radians(self.angle)) * self.speed)  # y-pos
         self.rect = self.image.get_rect(center=(int(self.pos[0]), int(self.pos[1])))

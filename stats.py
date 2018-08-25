@@ -6,23 +6,28 @@ BLACK   = (0,   0,  0)
 
 #       display
 FPS = 60  # calc speed as well
-resolution = (1000, 800)
-fullscreen = False
+RESOLUTION = (1000, 800)
+WIDTH = RESOLUTION[0]
+HEIGHT = RESOLUTION[1]
+FULLSCREEN = False
 TANK_LAYER = 3
 BULLET_LAYER = 2
 WALL_LAYER = 4
 BG_LAYER = 0
 POW_LAYER = 1
+FONT_NAME = "Times"
+BG_COLOR = WHITE
+NAME = "Tank Game"
 
 
 #       tank
-tank_speed = 200 / FPS
-turn_speed = 120 / FPS
-tank_gear = {0: 0,
-             1: tank_speed,
-             -1: -tank_speed}
-TANK_START_POS = {"red": (resolution[0] / 4, resolution[1] / 4),
-                      "blue": (3 * resolution[0] / 4, 3 * resolution[1] / 4)}
+TANK_SPEED = 200 / FPS
+TURN_SPEED = 120 / FPS
+TANK_GEAR = {0: 0,
+             1: TANK_SPEED,
+             -1: -TANK_SPEED}
+TANK_START_POS = {"red": (RESOLUTION[0] / 4, RESOLUTION[1] / 4),
+                      "blue": (3 * RESOLUTION[0] / 4, 3 * RESOLUTION[1] / 4)}
 
 
 #       bullet
