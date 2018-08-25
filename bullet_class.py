@@ -2,6 +2,7 @@ import time as t
 from stats import *
 import pygame
 import math as m
+from os import path
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -14,7 +15,7 @@ class Bullet(pygame.sprite.Sprite):
         self.pos = shooter.pos[:]
         self.angle = shooter.angle
         self.type = shooter.loaded_weapons[shooter.current_weapon]
-        img = {"normal":pygame.image.load("bullet_normal.png").convert(), "berta":pygame.image.load("bullet_berta.png").convert()}
+        img = {"normal":pygame.image.load(path.join(game.img_dir, "bullet_normal.png")).convert(), "berta":pygame.image.load(path.join(game.img_dir, "bullet_berta.png")).convert()}
         self.image = img[self.type]
         self.rect = self.image.get_rect()
         self.speed = BULLETS[self.type]["vel"]
@@ -35,3 +36,4 @@ class Bullet(pygame.sprite.Sprite):
 
     def pos_time_check(self):
         pass
+

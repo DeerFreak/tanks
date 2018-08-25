@@ -3,6 +3,7 @@ import math as m
 import numpy as np
 from stats import *
 from bullet_class import Bullet
+from os import path
 
 vec = pg.math.Vector2
 
@@ -15,10 +16,11 @@ class Tank(pg.sprite.Sprite):
         self.angle = 0
         self.color = color
         self.pos = vec(TANK_START_POS[self.color])
+        self.last_fired = 0
 
         self.surf = game.surf
         img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
-        self.image_org = pg.image.load(img[self.color]).convert()
+        self.image_org = pg.image.load(path.join(game.img_dir, img[self.color])).convert()
         self.image_org.set_colorkey(WHITE)
         self.image = self.image_org.copy()
         self.image.set_colorkey(WHITE)  # plot

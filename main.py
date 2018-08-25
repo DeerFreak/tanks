@@ -1,3 +1,7 @@
+# A TOP DOWN TANK BATTLE GAME
+# playing music: Playonloop.com
+
+
 from init import *
 from mainloop import App
 
