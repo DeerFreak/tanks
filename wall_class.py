@@ -1,8 +1,10 @@
 import pygame
-
+from stats import *
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, pos0, angle0, surf):
+    def __init__(self, game, pos0, angle0, surf):
+        self._layer = WALL_LAYER
+        self.groups = game.all_sprites
         pygame.sprite.Sprite.__init__(self)
         self.pos = pos0[:]
         self.angle = angle0

@@ -1,28 +1,29 @@
 import time as t
-from stats import bullets
+from stats import *
 import pygame
-from colors import *
 import math as m
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, pos0, angle0, type, shooter, surf):
-        pygame.sprite.Sprite.__init__(self)
-        self.pos = pos0[:]
-        self.angle = angle0
-        self.image = None
-        if type == "normal":
-            self.image = pygame.image.load("bullet_normal.png").convert_alpha()
-        elif type == "berta":
-            self.image = pygame.image.load("bullet_berta.png").convert_alpha()
-        self.type = type
+    def __init__(self, shooter):
+        game = shooter.game
+        self._layer = BULLET_LAYER
+        self.groups = game.all_sprites, game.bullets
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.pos = shooter.pos[:]
+        self.angle = shooter.angle
+        self.type = shooter.loaded_weapons[shooter.current_weapon]
+        img = {"normal":pygame.image.load("bullet_normal.png").convert(), "berta":pygame.image.load("bullet_berta.png").convert()}
+        self.image = img[self.type]
         self.rect = self.image.get_rect()
-        self.speed = bullets[type]["vel"]
+        self.speed = BULLETS[self.type]["vel"]
+        self.dmg = BULLETS[self.type]["dmg"]
         self.shooter = shooter
-        self.t_expire = t.time() + bullets[type]["l_time"]
+        self.t_expire = t.time() + BULLETS[self.type]["l_time"]
         self.shoot_time = t.time()
 
-        self.surf = surf
+        self.surf = game.surf
 
     def move(self):
         self.pos[0] += (m.cos(m.radians(self.angle)) * self.speed)  # x-pos
@@ -34,6 +35,3 @@ class Bullet(pygame.sprite.Sprite):
 
     def pos_time_check(self):
         pass
-
-    def plot(self):
-        self.surf.blit(self.image, self.rect)

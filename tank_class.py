@@ -1,20 +1,31 @@
-import pygame
+import pygame as pg
 import math as m
 import numpy as np
-from colors import *
-from stats import turn_speed, tank_speed, tank_gear, resolution
+from stats import *
 from bullet_class import Bullet
 
+vec = pg.math.Vector2
 
-class Tank(pygame.sprite.Sprite):
-    def __init__(self, start_pos, surf, color):
-        pygame.sprite.Sprite.__init__(self)
-        if color == "red":  # tank1
-            img = "tank_red_2.png"
-        else:  # tank2
-            img = "tank_blue_2.png"
-        self.image = pygame.image.load(img).convert()
+
+class Tank(pg.sprite.Sprite):
+    def __init__(self, game, color):
+        self._layer = TANK_LAYER
+        self.groups = game.all_sprites, game.tanks
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.angle = 0
+        self.color = color
+        self.pos = vec(TANK_START_POS[self.color])
+
+        self.surf = game.surf
+        img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
+        self.image_org = pg.image.load(img[self.color]).convert()
+        self.image_org.set_colorkey(WHITE)
+        self.image = self.image_org.copy()
         self.image.set_colorkey(WHITE)  # plot
+        self.rect = self.image.get_rect(center=self.pos)  # Plot-details
+        self.mask = pg.mask.from_surface(self.image)
+
         self.alive = True  # tank alive
         self.health = 200
 
@@ -25,25 +36,22 @@ class Tank(pygame.sprite.Sprite):
         self.loaded_weapons = ["normal", "berta"]
         self.current_weapon = 0
         
-        self.angle = 0
-        self.pos = [start_pos[0], start_pos[1]]
-        
-        self.rect = self.image.get_rect()  # Plot-details
-        self.surf = surf
-        self.toRotate = self.image.copy()  # plot
 
-        self.mask = pygame.mask.from_surface(self.toRotate)
+        
+    def update(self):
+        self.move()
+
 
     def move(self):
         pos_old = self.pos[:]  # to reset if outside of borders
-        self.pos[0] += (m.cos(m.radians(self.angle)) * tank_gear[self.moving]) # x-pos
-        self.pos[1] -= (m.sin(m.radians(self.angle)) * tank_gear[self.moving]) # y-pos
+        self.pos.x += (m.cos(m.radians(self.angle)) * tank_gear[self.moving]) # x-pos
+        self.pos.y -= (m.sin(m.radians(self.angle)) * tank_gear[self.moving]) # y-pos
         self.calc_rect()
+        self.mask = pg.mask.from_surface(self.image)
         self.pos_border_check(pos_old)
 
     def fire(self):
-        bullet = Bullet(self.pos, self.angle, self.loaded_weapons[self.current_weapon], self, self.surf)
-        return bullet
+        Bullet(self)
 
     def next_weapon(self):
         self.current_weapon = (self.current_weapon + 1) % len(self.loaded_weapons)
@@ -63,16 +71,12 @@ class Tank(pygame.sprite.Sprite):
             self.angle -= self.turn_speed * dir
             self.calc_rect()  # to get right plot
 
-    def plot(self):
-        # calc_rect # only if not calced before
-        self.surf.blit(self.toRotate, self.rect)  # rest is already calced
-
     def calc_angle(self, dir):
         self.angle += self.turn_speed * dir  # turn
         self.calc_rect()  # new tank pos
         self.angle_border_check(dir)  # checking for borders and if so reset
 
     def calc_rect(self):
-        self.toRotate = pygame.transform.rotate(self.image, self.angle)
-        self.mask = pygame.mask.from_surface(self.toRotate)
-        self.rect = self.toRotate.get_rect(center=(int(self.pos[0]), int(self.pos[1])))
+        self.image = pg.transform.rotate(self.image_org, self.angle)
+        self.rect = self.image.get_rect(center=self.pos)
+
