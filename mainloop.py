@@ -29,10 +29,6 @@ class App(object):
         self.snd_dir = path.join(self.dir, "snd")
         # graphics
         self.expl1 = Spritesheet(path.join(self.img_dir, EXPL1))
-        self.expl_dir = {"normal":[]}
-        for row in range(8):
-            for column in range(8):
-                self.expl_dir["normal"].append(self.expl1.get_image(23 +column * 129, 40 + row * 128, 80, 90))
         game_icon = pg.image.load(path.join(self.img_dir, 'icon.png'))
         pg.display.set_icon(game_icon)
 
@@ -60,6 +56,24 @@ class App(object):
                 img.set_colorkey(BLACK)
                 img.convert()
                 self.img_bullets[bullet][color] = img
+        # explosions
+        self.img_explosions = {}
+        self.img_explosions["normal"] = {}
+        for type in EXPLOSION_IMG_DICT:
+            self.img_explosions["normal"][type] = []
+            for frame in EXPLOSION_IMG_DICT[type]:
+                img = self.graphics.get_image(*frame)
+                img.set_colorkey(BLACK)
+                img.convert()
+                self.img_explosions["normal"][type].append(img)
+        # background
+        img = self.graphics.get_image(*BG_IMG_DICT[BG_ATM])
+        self.img_ground = pg.Surface((WIDTH, HEIGHT))
+        for coloum in range((2 * WIDTH // 128) + 1):
+            for row in range((2 * HEIGHT // 128) + 1):
+                self.img_ground.blit(img, (coloum * 128 / 2, row * 128 / 2))
+        self.img_ground_rect = self.img_ground.get_rect()
+
 
         # sound
         self.shot_snd_dir = {}
@@ -141,11 +155,12 @@ class App(object):
         for hit in hits:
             if hit != hits[hit][0].shooter:
                 hit.health -= hits[hit][0].dmg
-                Explosion(self, hits[hit][0].rect.center, "normal", self.expl_dir)
+                Explosion(self, hits[hit][0].rect.center, self.img_explosions["normal"]["white"])
                 hits[hit][0].kill()
 
     def plot(self):
         self.surf.fill(BG_COLOR)
+        self.surf.blit(self.img_ground, self.img_ground_rect)
         self.draw_text(f"Player 1: {str(self.tank1.health)}HP", 30, RED, 120, 5)
         self.draw_text(f"Player 2: {str(self.tank2.health)}HP", 30, BLUE, 120, 35)
         # Game Loop - draw

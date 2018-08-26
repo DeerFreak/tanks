@@ -16,8 +16,8 @@ class Bullet(pg.sprite.Sprite):
         self.pos = self.shooter.pos[:]
         self.angle = shooter.angle
         self.type = shooter.loaded_weapons[shooter.current_weapon]
-        self.image = game.img_bullets[self.type][self.shooter.color]
-        self.image = pg.transform.rotate(self.image, self.angle)
+        self.image = game.img_bullets[self.type][self.shooter.color].copy() # get copy of bullet img
+        self.image = pg.transform.rotate(self.image, self.angle) # rotate to appropiate angle
         self.rect = self.image.get_rect()
         self.image.set_colorkey(BLACK)
         self.speed = BULLETS[self.type]["vel"]
@@ -35,7 +35,3 @@ class Bullet(pg.sprite.Sprite):
     def time_check(self):
         if pg.time.get_ticks() >= self.expire_time:
             self.kill()
-
-    def pos_time_check(self):
-        pass
-

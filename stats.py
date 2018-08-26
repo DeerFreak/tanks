@@ -21,14 +21,24 @@ BG_COLOR = WHITE
 NAME = "Tank Game"
 
 EXPL1 = "boom3.png"
-FRAME_TICK_RATES = {"normal":2}
+FRAME_TICK_RATES_EXPL = 70
 
 # graphics
-TANK_IMG_DIC = {"red":  [(588, 0, 83, 78), (834, 0, 24, 58)],\
-                "blue": [(506, 78, 83, 78),(827, 226, 24,58)]}
-BULLET_IMG_DIC = {"normal":{"red":(711, 140, 20, 34), "blue":(148, 345, 20, 34)},\
-                  "berta":{"red":(735, 300, 20, 34), "blue":(755, 300, 20, 34)}}
-
+TANK_IMG_DIC =\
+    {"red":  [(588, 0, 83, 78), (834, 0, 24, 58)],\
+    "blue": [(506, 78, 83, 78),(827, 226, 24,58)]}
+BULLET_IMG_DIC =\
+    {"normal":{"red":(711, 140, 20, 34), "blue":(148, 345, 20, 34)},\
+    "berta":{"red":(735, 300, 20, 34), "blue":(755, 300, 20, 34)}}
+EXPLOSION_IMG_DICT =\
+    {"white":[(324, 107, 92, 89),\
+              (396, 285, 90, 99),\
+              (590, 182, 79, 79),\
+              (128, 0, 100, 97),\
+              (226, 194, 98, 107),\
+              (418, 0, 87, 87)]}
+BG_IMG_DICT = {"grass":(0, 128, 128, 128), "dirt":(0, 0, 128, 128), "sand":(0, 256, 128, 128)}
+BG_ATM = "grass"
 
 # game stats
 WALLS_NUMBER = 0
