@@ -27,14 +27,46 @@ class App(object):
         self.dir = path.dirname(__file__)
         self.img_dir = path.join(self.dir, "img")
         self.snd_dir = path.join(self.dir, "snd")
+        # graphics
         self.expl1 = Spritesheet(path.join(self.img_dir, EXPL1))
         self.expl_dir = {"normal":[]}
         for row in range(8):
             for column in range(8):
                 self.expl_dir["normal"].append(self.expl1.get_image(23 +column * 129, 40 + row * 128, 80, 90))
-
         game_icon = pg.image.load(path.join(self.img_dir, 'icon.png'))
         pg.display.set_icon(game_icon)
+
+        self.graphics = Spritesheet(path.join(self.img_dir, "sheet_tanks.png"))
+        # Tanks
+        self.img_tanks = {}
+        for color in ["red", "blue"]:
+            img = pg.Surface((83 / 2, 100 / 2)) # 88
+            body = self.graphics.get_image(*TANK_IMG_DIC[color][0])
+            barrel = self.graphics.get_image(*TANK_IMG_DIC[color][1])
+            barrel.set_colorkey(BLACK)
+            img.blit(body, (0, 10))
+            img.blit(barrel, (14,0))
+            img = pg.transform.rotate(img, -90)
+            img.set_colorkey(BLACK)
+            img.convert()
+            self.img_tanks[color] = img
+        # bullets
+        self.img_bullets = {}
+        for bullet in BULLETS:
+            self.img_bullets[bullet] = {}
+            for color in ["red", "blue"]:
+                img = self.graphics.get_image(*BULLET_IMG_DIC[bullet][color])
+                img = pg.transform.rotate(img, -90)
+                img.set_colorkey(BLACK)
+                img.convert()
+                self.img_bullets[bullet][color] = img
+
+        # sound
+        self.shot_snd_dir = {}
+        self.shot_snd_dir["normal"] = pg.mixer.Sound(path.join(self.snd_dir, "shot0.wav"))
+        self.shot_snd_dir["berta"] = pg.mixer.Sound(path.join(self.snd_dir, "shot1.wav"))
+        self.expl_snd_dir = {}
+        self.expl_snd_dir["normal"] = pg.mixer.Sound(path.join(self.snd_dir, "expl0.wav"))
 
     def start(self):
         self.all_sprites = pg.sprite.Group()

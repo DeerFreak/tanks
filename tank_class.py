@@ -20,9 +20,10 @@ class Tank(pg.sprite.Sprite):
         self.sign = 1
 
         self.surf = game.surf
-        img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
-        self.image_org = pg.image.load(path.join(game.img_dir, img[self.color])).convert()
-        self.image_org.set_colorkey(WHITE)
+        #img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
+        #self.image_org = pg.image.load(path.join(game.img_dir, img[self.color])).convert()
+        #self.image_org.set_colorkey(WHITE)
+        self.image_org = game.img_tanks[self.color]
         self.image = self.image_org.copy()
         self.image.set_colorkey(WHITE)  # plot
         self.rect = self.image.get_rect(center=self.pos)  # Plot-details

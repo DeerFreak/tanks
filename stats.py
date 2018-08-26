@@ -23,12 +23,19 @@ NAME = "Tank Game"
 EXPL1 = "boom3.png"
 FRAME_TICK_RATES = {"normal":2}
 
+# graphics
+TANK_IMG_DIC = {"red":  [(588, 0, 83, 78), (834, 0, 24, 58)],\
+                "blue": [(506, 78, 83, 78),(827, 226, 24,58)]}
+BULLET_IMG_DIC = {"normal":{"red":(711, 140, 20, 34), "blue":(148, 345, 20, 34)},\
+                  "berta":{"red":(735, 300, 20, 34), "blue":(755, 300, 20, 34)}}
+
+
 # game stats
-WALLS_NUMBER = 20
+WALLS_NUMBER = 0
 
 # music
-MUSIC_VOL_INGAME = 0.2
-MUSIC_VOL_LS = 1.2
+MUSIC_VOL_INGAME = 0 # 0.2 is good
+MUSIC_VOL_LS = 0   # 1.4 is good
 
 # tank
 TANK_SPEED = 200 / FPS
@@ -41,8 +48,8 @@ TANK_START_POS = {"red": (RESOLUTION[0] / 4, RESOLUTION[1] / 4),
 
 
 # bullet
-BULLETS = {"normal": {"vel": 500 / FPS, "l_time": 5, "size": 6, "color": BLACK, "reload_time": 300, "dmg":20},
-           "berta": {"vel": 1000 / FPS, "l_time": 10, "size": 10, "color": BLUE, "reload_time": 1000, "dmg":40}}
+BULLETS = {"normal": {"vel": 500 / FPS, "l_time": 500, "size": 6, "color": BLACK, "reload_time": 300, "dmg":20},
+           "berta": {"vel": 1000 / FPS, "l_time": 1000, "size": 10, "color": BLUE, "reload_time": 1000, "dmg":40}}
 
 
 

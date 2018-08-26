@@ -15,6 +15,7 @@ class Explosion(pg.sprite.Sprite):
         self.frame = 0
         self.last_update = pg.time.get_ticks()
         self.frame_rate = FRAME_TICK_RATES[self.size]
+        game.expl_snd_dir["normal"].play()
 
     def update(self):
         now = pg.time.get_ticks()
