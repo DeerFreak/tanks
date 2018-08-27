@@ -83,7 +83,7 @@ class Tank(pg.sprite.Sprite):
         self.pos_border_check(pos_old)
 
     def fire(self):
-        Bullet(self)
+        Bullet(self, self.game)
 
     def next_weapon(self):
         self.current_weapon = (self.current_weapon + 1) % len(self.loaded_weapons)
