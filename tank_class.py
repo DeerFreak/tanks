@@ -8,21 +8,18 @@ from os import path
 vec = pg.math.Vector2
 
 class Tank(pg.sprite.Sprite):
-    def __init__(self, game, color):
+    def __init__(self, game, color, x, y):
         self._layer = TANK_LAYER
         self.groups = game.all_sprites, game.tanks
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.angle = 0
         self.color = color
-        self.pos = vec(TANK_START_POS[self.color])
+        self.pos = vec(x, y) * TILESIZE
         self.last_fired = 0
         self.sign = 1
 
         self.surf = game.surf
-        #img = {"red":"tank_red_2.png","blue":"tank_blue_2.png"}
-        #self.image_org = pg.image.load(path.join(game.img_dir, img[self.color])).convert()
-        #self.image_org.set_colorkey(WHITE)
         self.image_org = game.img_tanks[self.color]
         self.image = self.image_org.copy()
         self.image.set_colorkey(WHITE)  # plot

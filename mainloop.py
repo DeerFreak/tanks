@@ -1,5 +1,4 @@
 import pygame as pg
-import sys
 import time as t
 from pygame.locals import *
 import numpy as np
@@ -35,6 +34,9 @@ class App(object):
         self.graphics = Spritesheet(path.join(self.img_dir, "sheet_tanks.png"))
         # Tanks
         self.img_tanks = {}
+        # map
+        self.map = Map(path.join(self.dir, "map0.txt"))
+
         for color in ["red", "blue"]:
             img = pg.Surface((83 / 2, 100 / 2)) # 88
             body = self.graphics.get_image(*TANK_IMG_DIC[color][0])
@@ -88,8 +90,15 @@ class App(object):
         self.bullets = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
-        self.tank1 = Tank(self, "red")
-        self.tank2 = Tank(self, "blue")
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == "1":
+                    Wall(self, col, row)
+                if tile == "a":
+                    self.tank1 = Tank(self, "red", col, row)
+                if tile == "b":
+                    self.tank2 = Tank(self, "blue", col, row)
+
         self.tank2_group = pg.sprite.Group()
         self.tank2_group.add(self.tank2)
         # spawing random walls
@@ -109,6 +118,7 @@ class App(object):
         pg.mixer.music.play(-1)
         pg.mixer.music.set_volume(MUSIC_VOL_INGAME)
 
+
         while self.tank1.health > 0 and self.tank2.health > 0:
             self.clock.tick(FPS)
             self.events()
@@ -119,11 +129,14 @@ class App(object):
                 if pg.sprite.spritecollide(self.tank1, self.tank2_group, False, pg.sprite.collide_mask):
                     self.tanks.update()
             # collision of tanks & walls
+            """
             if pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask): # to improve performance
                 collisions = pg.sprite.groupcollide(self.tanks, self.walls, False, False, pg.sprite.collide_mask)
                 for col in collisions:
                     col.update()
+            """
             (self.tank1.sign, self.tank2.sign) = (1,) * 2 # reset sign after tank collisions
+
             pg.sprite.groupcollide(self.bullets, self.walls, True, False)
             self.bullets.update()
             self.check_bullet_hit()
