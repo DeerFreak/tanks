@@ -28,13 +28,14 @@ class Bullet(pg.sprite.Sprite):
 
     def update(self):
         self.time_check()
-        self.pos[0] += (m.cos(m.radians(self.angle)) * self.speed)  # x-pos
-        self.pos[1] -= (m.sin(m.radians(self.angle)) * self.speed)  # y-pos
+        self.pos[0] += (m.cos(m.radians(self.angle)) * self.speed * self.game.dt)  # x-pos
+        self.pos[1] -= (m.sin(m.radians(self.angle)) * self.speed * self.game.dt)  # y-pos
         self.rect = self.image.get_rect(center=(int(self.pos[0]), int(self.pos[1])))
         self.check_hit()
 
     def time_check(self):
         if pg.time.get_ticks() >= self.expire_time:
+            Explosion(self.game, self.rect.center, self.game.img_explosions["normal"]["white"])
             self.kill()
 
     def check_hit(self):

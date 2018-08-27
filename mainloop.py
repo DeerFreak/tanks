@@ -53,7 +53,7 @@ class App(object):
     def start(self):
         self.new()
         while self.tank1.health > 0 and self.tank2.health > 0:
-            self.clock.tick(FPS)
+            self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.all_sprites.update()
             self.bullets.update()

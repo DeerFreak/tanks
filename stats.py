@@ -26,6 +26,27 @@ NAME = "Tank Game"
 EXPL1 = "boom3.png"
 FRAME_TICK_RATES_EXPL = 70
 
+# game stats
+WALLS_NUMBER = 0
+
+# music
+MUSIC_VOL_INGAME = 0 # 0.2 is good
+MUSIC_VOL_LS = 0   # 1.4 is good
+
+# tank
+TANK_SPEED = 200
+TURN_SPEED = 120
+TANK_GEAR = {0: 0,
+             1: TANK_SPEED,
+             -1: -TANK_SPEED}
+TANK_START_POS = {"red": (RESOLUTION[0] / 4, RESOLUTION[1] / 4),
+                      "blue": (3 * RESOLUTION[0] / 4, 3 * RESOLUTION[1] / 4)}
+
+
+# bullet
+BULLETS = {"normal": {"vel": 500, "l_time": 500, "size": 6, "color": BLACK, "reload_time": 300, "dmg":20},
+           "berta": {"vel": 1000, "l_time": 1000, "size": 10, "color": BLUE, "reload_time": 1000, "dmg":40}}
+
 # graphics
 TANK_IMG_DIC =\
     {"red":  [(588, 0, 83, 78), (834, 0, 24, 58)],\
@@ -42,28 +63,5 @@ EXPLOSION_IMG_DICT =\
               (418, 0, 87, 87)]}
 BG_IMG_DICT = {"grass":(0, 128, 128, 128), "dirt":(0, 0, 128, 128), "sand":(0, 256, 128, 128)}
 BG_ATM = "grass"
-
-# game stats
-WALLS_NUMBER = 0
-
-# music
-MUSIC_VOL_INGAME = 0 # 0.2 is good
-MUSIC_VOL_LS = 0   # 1.4 is good
-
-# tank
-TANK_SPEED = 200 / FPS
-TURN_SPEED = 120 / FPS
-TANK_GEAR = {0: 0,
-             1: TANK_SPEED,
-             -1: -TANK_SPEED}
-TANK_START_POS = {"red": (RESOLUTION[0] / 4, RESOLUTION[1] / 4),
-                      "blue": (3 * RESOLUTION[0] / 4, 3 * RESOLUTION[1] / 4)}
-
-
-# bullet
-BULLETS = {"normal": {"vel": 500 / FPS, "l_time": 500, "size": 6, "color": BLACK, "reload_time": 300, "dmg":20},
-           "berta": {"vel": 1000 / FPS, "l_time": 1000, "size": 10, "color": BLUE, "reload_time": 1000, "dmg":40}}
-
-
 
 

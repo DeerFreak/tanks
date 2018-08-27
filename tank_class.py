@@ -76,8 +76,8 @@ class Tank(pg.sprite.Sprite):
 
     def move(self):
         pos_old = vec(self.pos)  # to reset if outside of borders
-        self.pos.x += (m.cos(m.radians(self.angle)) * TANK_GEAR[self.moving]) # x-pos
-        self.pos.y -= (m.sin(m.radians(self.angle)) * TANK_GEAR[self.moving]) # y-pos
+        self.pos.x += (m.cos(m.radians(self.angle)) * TANK_GEAR[self.moving] * self.game.dt) # x-pos
+        self.pos.y -= (m.sin(m.radians(self.angle)) * TANK_GEAR[self.moving] * self.game.dt) # y-pos
         self.calc_rect()
         self.mask = pg.mask.from_surface(self.image)
         self.pos_border_check(pos_old)
@@ -97,14 +97,14 @@ class Tank(pg.sprite.Sprite):
     
     def angle_border_check(self, dir):
         if self.rect[0] < 0 or self.rect[0] + self.rect[2] > RESOLUTION[0]:  # angle change would place tank outside
-            self.angle -= self.turn_speed * dir
+            self.angle -= self.turn_speed * dir * self.game.dt
             self.calc_rect()  # to get right plot
         if self.rect[1] < 0 or self.rect[1] + self.rect[3] > RESOLUTION[1]:  # angle change would place tank outside
-            self.angle -= self.turn_speed * dir
+            self.angle -= self.turn_speed * dir * self.game.dt
             self.calc_rect()  # to get right plot
 
     def calc_angle(self, dir):
-        self.angle += self.turn_speed * dir  # turn
+        self.angle += self.turn_speed * dir * self.game.dt # turn
         self.calc_rect()  # new tank pos
         self.angle_border_check(dir)  # checking for borders and if so reset
 

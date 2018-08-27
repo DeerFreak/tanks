@@ -4,6 +4,7 @@ from tank_class import *
 from stats import *
 from spritesheet import *
 from sprites import *
+from random import choice
 
 def initialize_game():
     pg.init()
@@ -67,11 +68,11 @@ def load_App_data(game):
             img.convert()
             game.img_explosions["normal"][type].append(img)
     # background
-    img = game.graphics.get_image(*BG_IMG_DICT[BG_ATM])
+    img = (game.graphics.get_image(*BG_IMG_DICT[BG_ATM]),game.graphics.get_image(*BG_IMG_DICT["dirt"]))
     game.img_ground = pg.Surface((WIDTH, HEIGHT))
-    for coloum in range((2 * WIDTH // 128) + 1):
-        for row in range((2 * HEIGHT // 128) + 1):
-            game.img_ground.blit(img, (coloum * 128 / 2, row * 128 / 2))
+    for coloum in range(0, WIDTH, TILESIZE):
+        for row in range(0, HEIGHT, TILESIZE):
+            game.img_ground.blit(choice(img), (coloum, row))
     game.img_ground_rect = game.img_ground.get_rect()
 
     # sound
