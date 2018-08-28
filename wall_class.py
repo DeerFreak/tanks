@@ -9,8 +9,7 @@ class Wall(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE)).convert_alpha()
-        self.image.fill(BLUE)
+        self.image = game.walls_img.convert_alpha()
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y

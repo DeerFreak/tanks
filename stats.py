@@ -63,5 +63,6 @@ EXPLOSION_IMG_DICT =\
               (418, 0, 87, 87)]}
 BG_IMG_DICT = {"grass":(0, 128, 128, 128), "dirt":(0, 0, 128, 128), "sand":(0, 256, 128, 128)}
 BG_ATM = "grass"
+WALL_IMG_DIR = "wall.png"
 
 

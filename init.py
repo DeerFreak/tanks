@@ -74,6 +74,9 @@ def load_App_data(game):
         for row in range(0, HEIGHT, TILESIZE):
             game.img_ground.blit(choice(img), (coloum, row))
     game.img_ground_rect = game.img_ground.get_rect()
+    # walls
+    game.walls_img = pg.image.load(path.join(game.img_dir, WALL_IMG_DIR))
+    game.walls_img = pg.transform.scale(game.walls_img, (TILESIZE, TILESIZE))
 
     # sound
     game.shot_snd_dir = {}
