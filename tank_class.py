@@ -15,11 +15,11 @@ class Tank(pg.sprite.Sprite):
         self.game = game
         self.angle = 0
         self.color = color
-        self.pos = vec(x, y) * TILESIZE
+        self.pos = vec(x, y)
         self.last_fired = 0
         self.sign = 1
 
-        self.surf = game.surf
+        self.screen = game.screen
         self.image_org = game.img_tanks[self.color]
         self.image = self.image_org.copy()
         self.image.set_colorkey(WHITE)  # plot
@@ -27,7 +27,7 @@ class Tank(pg.sprite.Sprite):
         self.mask = pg.mask.from_surface(self.image)
 
         self.alive = True  # tank alive
-        self.health = 200
+        self.health = TANK_HEALTH
 
         self.turn_speed = -TURN_SPEED  # tank position_stats
         self.speed = TANK_SPEED

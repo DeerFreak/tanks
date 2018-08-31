@@ -1,17 +1,20 @@
+import pygame as pg
+vec = pg.math.Vector2
+
 # Colors
 WHITE   = (255, 255,255)
 BLUE    = (0,   0,  255)
 RED     = (255, 0,  0)
 BLACK   = (0,   0,  0)
+GREEN =  (34,139,34)
+YELLOW = (255,215,0)
 
-#       display
-FPS = 60  # calc speed as well
-TILESIZE = 32
-MAX_X_WALLS = 30
-MAX_Y_WALLS = 30
-RESOLUTION = (MAX_X_WALLS * TILESIZE, MAX_Y_WALLS * TILESIZE)
-WIDTH = RESOLUTION[0]
-HEIGHT = RESOLUTION[1]
+# display
+FPS = 60  
+TILESIZE = 64
+RESOLUTION = vec(15, 15) * TILESIZE
+WIDTH = int(RESOLUTION.x)
+HEIGHT = int(RESOLUTION.y)
 FULLSCREEN = False
 TANK_LAYER = 3
 BULLET_LAYER = 2
@@ -26,16 +29,14 @@ NAME = "Tank Game"
 EXPL1 = "boom3.png"
 FRAME_TICK_RATES_EXPL = 70
 
-# game stats
-WALLS_NUMBER = 0
-
 # music
-MUSIC_VOL_INGAME = 0 # 0.2 is good
-MUSIC_VOL_LS = 0   # 1.4 is good
+MUSIC_VOL_INGAME = 0.2 # 0.2 is good
+MUSIC_VOL_LS = 1.4   # 1.4 is good
 
 # tank
 TANK_SPEED = 200
 TURN_SPEED = 120
+TANK_HEALTH = 200
 TANK_GEAR = {0: 0,
              1: TANK_SPEED,
              -1: -TANK_SPEED}

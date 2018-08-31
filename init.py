@@ -4,15 +4,16 @@ from tank_class import *
 from stats import *
 from spritesheet import *
 from sprites import *
+from tiled_map import TiledMap
 from random import choice
 
 def initialize_game():
     pg.init()
     pg.mixer.init()
     if FULLSCREEN:
-        surf = pygame.display.set_mode((RESOLUTION[0], RESOLUTION[1]), pygame.FULLSCREEN)
+        surf = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
     else:
-        surf = pygame.display.set_mode((RESOLUTION[0], RESOLUTION[1]))
+        surf = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption(NAME)
     
     surf.fill(WHITE)
@@ -20,11 +21,11 @@ def initialize_game():
 
     return surf
 
-
 def load_App_data(game):
     game.dir = path.dirname(__file__)
     game.img_dir = path.join(game.dir, "img")
     game.snd_dir = path.join(game.dir, "snd")
+    game.map_dir = path.join(game.dir, "map")
     # graphics
     game.expl1 = Spritesheet(path.join(game.img_dir, EXPL1))
     game_icon = pg.image.load(path.join(game.img_dir, 'icon.png'))
@@ -33,9 +34,6 @@ def load_App_data(game):
     game.graphics = Spritesheet(path.join(game.img_dir, "sheet_tanks.png"))
     # Tanks
     game.img_tanks = {}
-    # map
-    game.map = Map(path.join(game.dir, "map0.txt"))
-
     for color in ["red", "blue"]:
         img = pg.Surface((83 / 2, 100 / 2))  # 88
         body = game.graphics.get_image(*TANK_IMG_DIC[color][0])
@@ -47,6 +45,12 @@ def load_App_data(game):
         img.set_colorkey(BLACK)
         img.convert()
         game.img_tanks[color] = img
+
+    # map
+    game.map = TiledMap(path.join(game.map_dir, 'level1.tmx'))
+    game.map_img = game.map.make_map()
+    game.map_rect = game.map_img.get_rect()
+    
     # bullets
     game.img_bullets = {}
     for bullet in BULLETS:
@@ -74,9 +78,6 @@ def load_App_data(game):
         for row in range(0, HEIGHT, TILESIZE):
             game.img_ground.blit(choice(img), (coloum, row))
     game.img_ground_rect = game.img_ground.get_rect()
-    # walls
-    game.walls_img = pg.image.load(path.join(game.img_dir, WALL_IMG_DIR))
-    game.walls_img = pg.transform.scale(game.walls_img, (TILESIZE, TILESIZE))
 
     # sound
     game.shot_snd_dir = {}

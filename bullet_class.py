@@ -1,10 +1,11 @@
 import time as t
-from stats import *
 import pygame as pg
 import math as m
 from os import path
-vec = pg.math.Vector2
 from sprites import *
+from stats import *
+
+vec = pg.math.Vector2
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, shooter, game):
@@ -24,7 +25,7 @@ class Bullet(pg.sprite.Sprite):
         self.dmg = BULLETS[self.type]["dmg"]
         self.game.shot_snd_dir[self.type].play() # play sound when created
         self.expire_time = pg.time.get_ticks() + BULLETS[self.type]["l_time"]
-        self.surf = self.game.surf
+        self.screen = self.game.screen
 
     def update(self):
         self.time_check()

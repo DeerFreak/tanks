@@ -2,18 +2,36 @@ import pygame as pg
 import time as t
 from pygame.locals import *
 import numpy as np
+import random
+from sprites import *
+from wall_class import *
 from stats import *
 from tank_class import Tank
 from os import path
 from spritesheet import Spritesheet
-from sprites import *
-from wall_class import *
-import random
 from init import load_App_data
+from tiled_map import TiledMap
+
+def draw_tank_health(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 20
+    fill = pct * BAR_LENGTH
+    outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    if pct > 0.6:
+        col = GREEN
+    elif pct > 0.3:
+        col = YELLOW
+    else:
+        col = RED
+    pg.draw.rect(surf, col, fill_rect)
+    pg.draw.rect(surf, WHITE, outline_rect, 2)
 
 class App(object):
-    def __init__(self, surf):
-        self.surf = surf
+    def __init__(self, screen):
+        self.screen = screen
         self.running = True
         self.font_name = pg.font.match_font(FONT_NAME)
         self.clock = pg.time.Clock()
@@ -32,14 +50,14 @@ class App(object):
         self.walls = pg.sprite.Group()
         self.explosions = pg.sprite.Group()
         # load map
-        for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == "1":
-                    Wall(self, col, row)
-                if tile == "a":
-                    self.tank1 = Tank(self, "red", col, row)
-                if tile == "b":
-                    self.tank2 = Tank(self, "blue", col, row)
+        for tile_object in self.map.tmxdata.objects:
+            if tile_object.name == 'tank1':
+                self.tank1 = Tank(self, "red", tile_object.x, tile_object.y)
+            if tile_object.name == 'tank2':
+                self.tank2 = Tank(self, "blue", tile_object.x, tile_object.y)
+            if tile_object.name == 'wall':
+                Obstacle(self, tile_object.x, tile_object.y,
+                 tile_object.width, tile_object.height)
         # rest
         self.tank2_group.add(self.tank2)
         self.event_keys = {"c": self.tank1.next_weapon,
@@ -87,27 +105,29 @@ class App(object):
         self.keys = pg.key.get_pressed()
 
     def draw(self):
-        self.surf.fill(BG_COLOR)
-        self.surf.blit(self.img_ground, self.img_ground_rect)
-        self.draw_text(f"Player 1: {str(self.tank1.health)}HP", 30, RED, 150, 50)
-        self.draw_text(f"Player 2: {str(self.tank2.health)}HP", 30, BLUE, 150, 80)
+        pg.display.set_caption("{:.2f}".format(self.clock.get_fps())) # FPS TITLE
+        self.screen.blit(self.map_img, self.map_rect)
+        self.draw_text("Player 1:", 30, RED, 150, 15)
+        self.draw_text("Player 2:", 30, BLUE, 700, 15)
+        draw_tank_health(self.screen, 210, 20, self.tank1.health / TANK_HEALTH)
+        draw_tank_health(self.screen, 760, 20, self.tank2.health / TANK_HEALTH)
         # Game Loop - draw
-        self.all_sprites.draw(self.surf)
+        self.all_sprites.draw(self.screen)
         # *after* drawing everything, flip the display
         pg.display.flip()
 
     def draw_text(self, text, size, color, x, y):
         font = pg.font.Font(self.font_name, size)
-        text_surf = font.render(text, True, color)
-        text_rect = text_surf.get_rect()
+        text_screen = font.render(text, True, color)
+        text_rect = text_screen.get_rect()
         text_rect.midtop = (x, y)
-        self.surf.blit(text_surf, text_rect)
+        self.screen.blit(text_screen, text_rect)
 
     def show_start_screen(self):
         pg.mixer.music.load(path.join(self.snd_dir, "ls_music.wav"))
         pg.mixer.music.play(-1)
         pg.mixer.music.set_volume(MUSIC_VOL_LS)
-        self.surf.fill(BG_COLOR)
+        self.screen.fill(BG_COLOR)
         self.draw_text(NAME, 50, BLUE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("controls1: wasd c v", 22, BLUE, WIDTH / 2, HEIGHT / 2)
         self.draw_text("controls2: Arrows o p", 22, BLUE, WIDTH / 2, HEIGHT / 2 + 25)
@@ -127,7 +147,7 @@ class App(object):
         pg.mixer.music.load(path.join(self.snd_dir, "ls_music.wav"))
         pg.mixer.music.play(-1)
         pg.mixer.music.set_volume(1.2)
-        self.surf.fill(BG_COLOR)
+        self.screen.fill(BG_COLOR)
         if self.tank1.health > 0:
             win_text = "Player 1 won!"
         else:
