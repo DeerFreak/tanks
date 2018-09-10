@@ -7,5 +7,6 @@ setup(name='Tanks',
           'nose',
           'coverage',
           'numpy',
-          'pygame'
+          'pygame',
+          'pytmx'
       ])
